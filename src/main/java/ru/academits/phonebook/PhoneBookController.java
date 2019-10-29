@@ -13,7 +13,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/phoneBook/rpc/api/v1")
 public class PhoneBookController {
-    private static final Logger logger = LoggerFactory.getLogger(PhoneBookController.class);
+    private static final Logger log = LoggerFactory.getLogger(PhoneBookController.class);
+
 
     private final ContactService contactService;
 
@@ -24,7 +25,7 @@ public class PhoneBookController {
     @RequestMapping(value = "getAllContacts", method = RequestMethod.GET)
     @ResponseBody
     public List<Contact> getAllContacts() {
-        logger.info("called method getAllContacts");
+        log.info("called method getAllContacts");
         return contactService.getAllContacts();
     }
 
@@ -36,9 +37,16 @@ public class PhoneBookController {
 
     @RequestMapping(value = "deleteContact", method = RequestMethod.POST)
     @ResponseBody
-    public List<Contact> deleteContact(@RequestBody Contact contact){
-        logger.info("called method deleteContact");
-        return contactService.deleteContact(contact.getId());}
+    public List<Contact> deleteContact(@RequestBody Contact contact) {
+        log.info("called method deleteContact with Id " + contact.getId());
+        if (contactService.deleteContact(contact.getId())) {
+            log.info("contact is deleted");
+        } else {
+            log.info("contact is not deleted");
+        }
+
+        return contactService.getAllContacts();
+    }
 }
 
 

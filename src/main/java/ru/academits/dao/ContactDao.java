@@ -34,13 +34,13 @@ public class ContactDao {
         contactList.add(contact);
     }
 
-    public void delete(int contactId) {
+    public boolean delete(int contactId) {
         Contact contact = null;
         for (Contact e : contactList) {
             if (e.getId() == contactId) {
                 contact = e;
             }
         }
-        contactList.remove(contact);
+      return contactList.remove(contact);
     }
 }

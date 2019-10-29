@@ -88,6 +88,17 @@ new Vue({
             $.get("/phoneBook/rpc/api/v1/getAllContacts").done(function (contactListFormServer) {
                 self.rows = self.convertContactList(contactListFormServer);
             });
+        },
+        reloadData: function () {
+            var self = this;
+
+            $.ajax({
+                url:"/phoneBook/rpc/api/v1/getAllContacts",
+                type:"GET",
+                timeout: 5000
+            }).done(function (contactListFormServer) {
+                self.rows = self.convertContactList(contactListFormServer);
+            });
         }
     },
     computed: {

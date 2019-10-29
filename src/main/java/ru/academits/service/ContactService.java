@@ -66,8 +66,12 @@ public class ContactService {
         return contactDao.getAllContacts();
     }
 
-    public List<Contact> deleteContact(int contactId){
+   /* public List<Contact> deleteContact(int contactId){
         contactDao.delete(contactId);
         return contactDao.getAllContacts();
+    }*/
+
+    public boolean deleteContact(int contactId){
+                return contactDao.delete(contactId);
     }
 }
