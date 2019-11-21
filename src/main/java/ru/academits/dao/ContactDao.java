@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
+/*@Repository
 public class ContactDao {
     private List<Contact> contactList = new ArrayList<>();
     private AtomicInteger idSequence = new AtomicInteger(0);
 
-    public ContactDao() {
+   public ContactDao() {
         Contact contact = new Contact();
         contact.setId(getNewId());
         contact.setFirstName("Иван");
@@ -34,7 +34,7 @@ public class ContactDao {
         contactList.add(contact);
     }
 
-    public boolean delete(int contactId) {
+    public boolean delete(long contactId) {
         Contact contact = null;
         for (Contact e : contactList) {
             if (e.getId() == contactId) {
@@ -43,4 +43,4 @@ public class ContactDao {
         }
       return contactList.remove(contact);
     }
-}
+}*/

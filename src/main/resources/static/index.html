@@ -21,10 +21,10 @@
     <div class="filter-container">
         <label class="mr-1">
             Введите текст:
-            <input type="text" class="form-control input-sm"/>
+            <input type="text" class="form-control input-sm" v-model="term"/>
         </label>
-        <button class="btn btn-primary">Отфильтровать</button>
-        <button class="btn btn-primary">Сбросить фильтр</button>
+        <button class="btn btn-primary" @click="filterContacts" type="button">Отфильтровать</button>
+        <button class="btn btn-primary" @click="resetFilter" type="button">Сбросить фильтр</button>
     </div>
 
     <table class="table table-bordered contact-table">
@@ -32,7 +32,7 @@
         <tr>
             <th>
                 <label class="select-all-label">
-                    <input type="checkbox" title="Выбрать"/>
+                    <input type="checkbox" title="Выбрать" v-model="isCheckedAll" @click="checkAll"/>
                 </label>
             </th>
             <th>№</th>
@@ -47,7 +47,7 @@
             <template v-if="row.shown">
                 <td>
                     <label class="select-me-label">
-                        <input type="checkbox" class="select-me"/>
+                        <input type="checkbox" class="select-me" v-model="row.checked" @change="updateIsCheckedAll(row)"/>
                     </label>
                 </td>
                 <td v-text="row.number"></td>
@@ -62,7 +62,7 @@
         </tbody>
     </table>
 
-    <button type="button" class="btn btn-primary">Удалить выбранные</button>
+    <button type="button" class="btn btn-primary" @click="deleteCheckedContacts(rows)">Удалить выбранные</button>
 
     <br>
 

@@ -31,7 +31,7 @@ public class AddContactUnitTest {
     @MockBean
     private ContactService service;
 
-    @Test
+   /* @Test
     public void givenPhone_whenGetContactPhone_thenReturnJsonArray()
             throws Exception {
 
@@ -50,6 +50,6 @@ public class AddContactUnitTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].phone", Matchers.is("123456")));
-    }
+    }*/
 }
 

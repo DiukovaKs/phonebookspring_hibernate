@@ -4,8 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.academits.phonebook.PhoneBookController;
 import ru.academits.service.ContactService;
+
+import javax.transaction.Transactional;
 
 @Component
 public class DeleteRandomContactScheduler {
@@ -16,13 +17,16 @@ public class DeleteRandomContactScheduler {
         this.contactService = contactService;
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 7000)
+    @Transactional
     public void deleteRandomContact() {
-        int max = contactService.getAllContacts().get(contactService.getAllContacts().size() - 1).getId();
-        int rnd = (int) (Math.random() * max);
+        Long max = contactService.getAllContacts().get(contactService.getAllContacts().size() - 1).getId();
+
+        Long rnd = new Long((int) Math.round((Math.random() * max)));
+
+        log.info("delete contact with Id " + rnd + " by Scheduler");
 
         contactService.deleteContact(rnd);
         System.out.println("max id number " + max + " delete Contact with id = " + rnd);
-        log.info("delete contact with Id " + rnd + " by Scheduler");
     }
 }

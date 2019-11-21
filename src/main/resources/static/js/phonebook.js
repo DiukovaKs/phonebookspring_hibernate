@@ -1,4 +1,4 @@
-function Contact(firstName, lastName, phone, id) {
+function Contact(firstName, lastName, phone, id, checked) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
@@ -16,7 +16,10 @@ new Vue({
         lastName: "",
         phone: "",
         rows: [],
-        serverError: ""
+        serverError: "",
+        term: "",
+        checked: false,
+        isCheckedAll: false
     },
     methods: {
         contactToString: function (contact) {
@@ -70,18 +73,68 @@ new Vue({
             self.phone = "";
             self.validation = false;
         },
-        deleteContact: function(contact){var self = this;
+        deleteContact: function (contact) {
+            var self = this;
             $.ajax({
                 type: "POST",
                 url: "/phoneBook/rpc/api/v1/deleteContact",
                 contentType: "application/json",
-                data: JSON.stringify({id:contact.id})
+                data: JSON.stringify({id: contact.id})
             }).done(function () {
                 self.serverValidation = false;
             }).always(function () {
                 self.loadData();
-            });},
+            });
+        },
+        deleteCheckedContacts: function (contactList) {
+            var self = this;
+            contactList.forEach(function (contact) {
+                if (contact.checked === true) {
+                    self.deleteContact(contact);
+                }
+            });
+            self.loadData();
+        },
+        filterContacts: function () {
+            var self = this;
 
+            var string = this.term;
+            if (string === "") {
+                self.loadData();
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/phoneBook/rpc/api/v1/filterContacts",
+                    contentType: "application/json",
+                    data: string
+                }).done(function (contacts) {
+                    self.serverValidation = false;
+                    self.rows = self.convertContactList(contacts);
+                }).always(function () {
+                });
+            }
+        },
+        resetFilter: function () {
+            this.term = "";
+        },
+        checkAll: function () {
+            this.isCheckedAll = !this.isCheckedAll;
+
+            if (this.isCheckedAll === true) {
+                this.rows.forEach(function (row) {
+                    row.checked = true;
+                })
+            } else {
+                this.rows.forEach(function (row) {
+                    row.checked = false;
+                })
+            }
+        },
+        updateIsCheckedAll: function (contact) {
+            if (contact.checked === false) {
+                this.isCheckedAll = false;
+            }
+        },
         loadData: function () {
             var self = this;
 
@@ -90,15 +143,7 @@ new Vue({
             });
         },
         reloadData: function () {
-            var self = this;
-
-            $.ajax({
-                url:"/phoneBook/rpc/api/v1/getAllContacts",
-                type:"GET",
-                timeout: 5000
-            }).done(function (contactListFormServer) {
-                self.rows = self.convertContactList(contactListFormServer);
-            });
+            setInterval(this.loadData, 15000); //обновление страницы через 15сек
         }
     },
     computed: {
@@ -160,6 +205,7 @@ new Vue({
     },
     created: function () {
         this.loadData();
+        this.reloadData();
     }
 });
 
